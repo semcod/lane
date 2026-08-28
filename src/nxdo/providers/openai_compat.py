@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -110,8 +111,10 @@ class OpenAICompatProvider(LLMProvider):
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://github.com/semcod/nxdo",
-            "X-Title": self.app_name,
+            "HTTP-Referer": os.getenv(
+                "OPENROUTER_APP_URL", "https://github.com/semcod/nxdo"
+            ),
+            "X-OpenRouter-Title": os.getenv("OPENROUTER_APP_NAME", self.app_name),
         }
 
         with httpx.Client(timeout=self.timeout) as client:

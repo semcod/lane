@@ -119,7 +119,7 @@ class OpenAICompatProviderTests(unittest.TestCase):
         call_args = mock_client.post.call_args
         headers = call_args.kwargs["headers"]
         self.assertEqual(headers["Authorization"], "Bearer sk-test")
-        self.assertEqual(headers["X-Title"], "test-app")
+        self.assertEqual(headers["X-OpenRouter-Title"], "test-app")
 
     @patch("nxdo.providers.openai_compat.httpx.Client")
     def test_call_api_handles_unexpected_response(self, mock_client_class: MagicMock) -> None:
