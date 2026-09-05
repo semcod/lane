@@ -6,10 +6,7 @@ from pathlib import Path
 
 from nxdo.metrics import (
     collect_file_metrics,
-    collect_coupling_matrix,
     get_coupling_clusters,
-    identify_bug_hotspots,
-    calculate_bus_factor,
 )
 
 
@@ -83,10 +80,6 @@ class MetricsTests(unittest.TestCase):
         clusters = get_coupling_clusters(coupling, min_coupling=0.5)
         self.assertEqual(len(clusters), 0)
 
-    def test_calculate_bus_factor_detects_silos(self) -> None:
-        # This test requires a git repo, so we'll test the logic manually
-        # In a real repo with history, this would return actual values
-        pass
 
 
 if __name__ == "__main__":

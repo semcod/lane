@@ -25,3 +25,5 @@ The automation command uses a separate environment. Synchronize the application 
 ## Delivery
 
 The registry targets observed on 2026-09-05 are costs 0.2.0, Goal 2.2.0, pfix 0.1.79, clickmd 1.1.15 and code2llm 0.5.176. PR and Actions checks hold the test results; the [ecosystem rollout history](https://github.com/semcod/costs/tree/main/docs/dependencies) belongs to costs. Reports and instructions are versioned in repository docs, rather than temporary machine directories.
+
+The existing CI retains its 95% coverage gate. Regression tests exercise real temporary Git histories, optional Koru failures, and auto-mode dry-run/synchronization boundaries. Bug-fix counting now combines keyword filters in one Git query and counts each commit once, preventing densities above 100% caused by repeated keywords. `pytest-cov` is declared in the dev extra so the coverage gate can also run from the lockfile.

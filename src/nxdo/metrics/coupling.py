@@ -35,7 +35,7 @@ def _get_commits_with_files(repo_path: Path, max_commits: int = 100) -> list[lis
             return []
         
         commits = []
-        current_files = []
+        current_files: list[str] = []
         
         for line in result.stdout.strip().split("\n"):
             if not line:
