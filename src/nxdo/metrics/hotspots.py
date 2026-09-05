@@ -73,22 +73,17 @@ def _get_bug_fix_commits(repo_path: Path, file_path: str, since: str = "90.days.
     bug_patterns = ["fix", "bug", "repair", "hotfix", "patch", "resolve", "issue"]
     
     try:
-        # Use git log with grep for each pattern
-        total = 0
-        for pattern in bug_patterns:
-            result = subprocess.run(
-                ["git", "log", f"--since={since}", f"--grep={pattern}", "-i", 
-                 "--oneline", "--", file_path],
-                cwd=repo_path,
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode == 0:
-                # Count unique commits (git log --grep can return duplicates across patterns)
-                commits = set(line.strip() for line in result.stdout.strip().split("\n") if line.strip())
-                total += len(commits)
-        
-        return total
+        result = subprocess.run(
+            ["git", "log", f"--since={since}", "--format=%H", "-i",
+             *(f"--grep={pattern}" for pattern in bug_patterns), "--", file_path],
+            cwd=repo_path,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            return 0
+        # Git combines these patterns with OR and emits each commit once.
+        return len({line.strip() for line in result.stdout.splitlines() if line.strip()})
     except Exception:
         return 0
 
