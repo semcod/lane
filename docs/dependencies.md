@@ -20,10 +20,12 @@ The automation command uses a separate environment. Synchronize the application 
 
 [Freshness CI](../.github/workflows/internal-dependency-freshness.yml) uses released Goal 2.2.0 to compare uv.lock with the highest published stable three-part versions of the catalog packages actually used here. It has read-only repository permissions, runs daily/manually/on dependency PRs, and retains JSON evidence. Registry and resolution errors remain visible. An audit does not prove a deployed environment has installed the new versions.
 
-[Locked tests](../.github/workflows/test-locked.yml) install the dev extra from uv.lock and run the full project suite on Python 3.10 and 3.13. A permissive version declaration alone does not refresh the lockfile; update creation, testing, merge and installation are separate steps.
+[Locked CI](../.github/workflows/ci.yml) installs the dev extra from uv.lock and runs the full suite, 95% coverage gate, mypy, Ruff and examples on Python 3.10, 3.11, 3.12 and 3.13. A permissive version declaration alone does not refresh the lockfile; update creation, testing, merge and installation are separate steps.
 
 ## Delivery
 
 The registry targets observed on 2026-09-05 are costs 0.2.0, Goal 2.2.0, pfix 0.1.79, clickmd 1.1.15 and code2llm 0.5.176. PR and Actions checks hold the test results; the [ecosystem rollout history](https://github.com/semcod/costs/tree/main/docs/dependencies) belongs to costs. Reports and instructions are versioned in repository docs, rather than temporary machine directories.
 
 The existing CI retains its 95% coverage gate. Regression tests exercise real temporary Git histories, optional Koru failures, and auto-mode dry-run/synchronization boundaries. Bug-fix counting now combines keyword filters in one Git query and counts each commit once, preventing densities above 100% caused by repeated keywords. `pytest-cov` is declared in the dev extra so the coverage gate can also run from the lockfile.
+
+The existing CI now uses uv.lock for all its gates. Its previous pip installation selected Ruff 0.16.6 while the lockfile contained 0.15.17, producing different lint rules from local checks. The lockfile is the shared source of dependency versions; updates to third-party tools need their own tested lockfile changes.
